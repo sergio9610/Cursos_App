@@ -6,7 +6,7 @@ if(!$conexion){
 	print("<br>");
 }
 else{
-	echo "Conectado a la base de datos";
+	//echo "Conectado a la base de datos";
 	print("<br>");
 }
 

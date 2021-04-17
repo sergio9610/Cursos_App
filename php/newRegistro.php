@@ -1,6 +1,6 @@
 <!--- Se llama base de datos para las ciudades ---->
 <?php
-// Conexion a base de datos de ciudaddes
+// Conexion a base de datos de ciudades
 require 'ciudad_database.php';
 $objData = new Database();
 
