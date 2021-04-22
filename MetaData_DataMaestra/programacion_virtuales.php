@@ -6,22 +6,17 @@ $objData = new Database();
 /*if(isset($_GET['opcion'])){
 	$sth1 = $objData->prepare('	');
 }*/
-// Petición para curso
-$curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');
+// Peticion para curso virtual
+$curso = $objData->prepare('SELECT nombre_curso FROM curso_virtual');
 $curso->execute();
 $result_curso = $curso->fetchAll();
 
-// Petición para sede
-$sede = $objData->prepare('SELECT barrio, nombre_sede FROM sedes');
-$sede->execute();
-$result_sede = $sede->fetchAll();
-
-// Petición para Grupo y Horario
+// Peticion para Grupo y Horario
 $gr_horario = $objData->prepare('SELECT grupo_horario FROM docente');
 $gr_horario->execute();
 $result_gr_horario = $gr_horario->fetchAll();
 
-//echo $result_id_salon[1][0];
+//echo $result_gr_horario[0][0];
 
 ?>
 
@@ -31,14 +26,14 @@ $result_gr_horario = $gr_horario->fetchAll();
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Programacion Curso</title>
+    <title>Programacion Curso Virtual</title>
 	<!-- Bootstrap 4 CDN -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 	<!-- Font Awesome -->
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Css Style -->
-    <link rel="stylesheet" href="../css/style_programacion.css">
+    <link rel="stylesheet" href="../css/style_virtual.css">
 	
 </head>
 <body>
@@ -60,13 +55,13 @@ $result_gr_horario = $gr_horario->fetchAll();
 
 	<!--- Titulo Principal --->
 		<div class="tituloPrincipal">
-			<h1 id = "titulo_1" class="titulo_1 display-5 text-uppercase font-weight-bold">Programación de tu Curso</h1>
+			<h1 id = "titulo_1" class="titulo_1 display-5 text-uppercase font-weight-bold">Programacion Curso Virtual</h1>
 		</div>
 
-	<!--- Formulario Elección Curso --->	
+	<!--- Formulario Login --->	
 		<div class="formulario col-sm-6 text-center">
 				
-			<form method="post" class="formulario" id="formulario" onsubmit="return validar();" action="validarCupos.php">
+			<form method="post" class="formulario" id="formulario" onsubmit="return validar();" action="validarCuposVirtual.php">
                 <table>
                     <tr>
                         <!--- Curso --->
@@ -79,22 +74,6 @@ $result_gr_horario = $gr_horario->fetchAll();
                                     <?php
 					                foreach ($result_curso as $key => $value){?>
 					                <option><?php echo $value['nombre_curso'];?></option>
-					                <?php
-					                }
-					                ?>
-                            </select>
-                            </div>
-                        </th>
-                        <!--- Sede --->
-                        <th>
-			                <div class="formulario__grupo" id="grupo__sede">
-				                <label for="sede" class="formulario__label formulario__label-sede">Sede</label>
-				                <select name="sede[]" id="sede">
-                                    <option value=""></option>
-					                <!-- Se llama el result de la consulta de db_ciudad -->
-                                    <?php
-					                foreach ($result_sede as $key => $value){?>
-					                <option><?php echo $value['nombre_sede'];?></option>
 					                <?php
 					                }
 					                ?>
@@ -145,10 +124,10 @@ $result_gr_horario = $gr_horario->fetchAll();
 						</a> 
 					</li>
 				</ul>
-		</div>
+			</div>
 	
 	</header><!-- /header -->
 	<!-- Scripts -->
-	<script src="../js/validacion_curso.js"></script>
+	<script src="../js/validacion_virtual.js"></script>
 </body>
 </html>

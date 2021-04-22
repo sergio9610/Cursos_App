@@ -52,7 +52,7 @@
 			Los cursos están ofertados tanto en modalidad presencial como virtual.</p>
 	</div><br>
 
- <!--- Cursos con AJAX --->
+ <!--- Cursos con AJAX 
 <h1 class="cursosPresenciales">Cursos Presenciales y Virtuales</h1>
 <section id="cursos" class="cursos"></section>
 <template id="curso-template">
@@ -63,7 +63,7 @@
 </template>
 <script src="https://js.stripe.com/v3/"></script>
 <script src="../js/stripe-checkout.js" type="module"></script> 
-
+--->
 
 <!----- Controlador de cursos ---- >
 <! Si el usuario se encuentra logeado, pasara a pagar cursos, de lo contrario se tendrá que logear o registrar --> 

@@ -6,7 +6,7 @@
 					<a class="btn_ingles_1 text-uppercase font-weight-bold rounded" href="../MetaData_DataMaestra/programacion_cursos.php"> Inglés 1 </a>
 			</button></th>
 		<th><button class="btn rounded">
-					<a class="btn_ingles_2 text-uppercase font-weight-bold rounded" href="pago.php"> Inglés 2 </a>
+					<a class="btn_ingles_2 text-uppercase font-weight-bold rounded" href="../MetaData_DataMaestra/programacion_cursos.php"> Inglés 2 </a>
 			</button></th>
 		<th><button class="btn rounded">
 					<a class="btn_ingles_3 text-uppercase font-weight-bold rounded" href="pago.php"> Inglés 3 </a>
@@ -59,7 +59,7 @@
 	<table class="virtuales">
 		<tr>
 			<th><button class="btn rounded">
-						<a class="btn_inglesV_1 text-uppercase font-weight-bold rounded" href="pago.php"> Inglés 1 </a>
+						<a class="btn_inglesV_1 text-uppercase font-weight-bold rounded" href="../MetaData_DataMaestra/programacion_virtuales.php"> Inglés 1 </a>
 				</button></th>
 			<th><button class="btn rounded">
 						<a class="btn_inglesV_2 text-uppercase font-weight-bold rounded" href="pago.php"> Inglés 2 </a>
