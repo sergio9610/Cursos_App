@@ -84,19 +84,17 @@ $result_gr_horario = $gr_horario->fetchAll();
                         <th>
                             <div class="formulario__grupo" id="grupo__horario">
 				                <label for="horario" class="formulario__label formulario__label-horario">Horario</label>
-				                <select name="horario" id="horario">
+				                <select name="horario[]" id="horario">
                                     <option value=""></option>
 					                <!-- Se llama el result de la consulta de db_ciudad -->
                                     <?php
 									//$curso = $_POST["curso"]; 
-									
-									//$result_gr_horario as $key => $value;?>
-									<option><?php echo $result_gr_horario[0][0];?></option>
-									<?php
-									
-										//echo $result_gr_horario[0][0];
-									
-					                ?>
+									//$result_gr_horario as $key => $value;
+									foreach ($result_gr_horario as $key => $value){?>
+										<option><?php echo $value['grupo_horario'];?></option>
+										<?php
+										}
+									?>
                             </select>
                             </div>
                         </th>

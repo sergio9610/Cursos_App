@@ -79,3 +79,16 @@ a .fab:hover{
 	color:#525B6B !important;
     height: 25px;
 }
+
+/*---- Mensaje de cupos disponibles ---*/
+.loginError{
+    font-size: 18px;
+	text-align: center;
+    margin-left: 430px;
+    width: 35%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #525B6B;
+    color: white;
+    border-radius: 3px;
+}

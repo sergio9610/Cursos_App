@@ -37,7 +37,7 @@ body{
 /*----- Formulario -----*/
 .formulario{
     margin-top: 50px;
-    margin-left: 150px;
+    margin-left: 180px;
 }
 
 .btn{
@@ -78,4 +78,17 @@ a .fab:hover{
 .wht, .fcbk, .fa-instagram{
 	color:#525B6B !important;
     height: 25px;
+}
+
+/*---- Mensaje de cupos disponibles ---*/
+.loginError{
+    font-size: 18px;
+	text-align: center;
+    margin-left: 430px;
+    width: 35%;
+    height: 40px;
+    line-height: 40px;
+    background-color: #525B6B;
+    color: white;
+    border-radius: 3px;
 }
