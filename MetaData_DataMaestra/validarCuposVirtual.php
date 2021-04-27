@@ -16,7 +16,7 @@ $cupos = $obj->prepare("SELECT cupos FROM curso_virtual WHERE `nombre_curso` = '
 $cupos->execute();
 $result_cupos = $cupos->fetchAll();
 $cp1 = $result_cupos[0][0];
-echo $cp1;
+
 // Actualización de cupos
 if($result_cupos[0][0]>0){
     $query_1 = "UPDATE `curso_virtual` SET `cupos` = `cupos` -1 WHERE `nombre_curso` = '$curso[0]'";

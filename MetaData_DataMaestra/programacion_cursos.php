@@ -38,7 +38,7 @@ $result_gr_horario = $gr_horario->fetchAll();
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Css Style -->
-    <link rel="stylesheet" href="../css/style_programacion.css">
+    <link rel="stylesheet" href="../css/styleProgramacion.css">
 	
 </head>
 <body>
@@ -69,6 +69,15 @@ $result_gr_horario = $gr_horario->fetchAll();
 			<form method="post" class="formulario" id="formulario" onsubmit="return validar();" action="validarCupos.php">
                 <table>
                     <tr>
+					<!--- Correo --->
+						<th>
+							<div class="formulario__grupo" id="grupo__correo">
+								<label for="correo" class="formulario__label formulario__label-correo">Correo</label>
+								<div class="formulario__grupo-input">
+									<input type="email" id="correo" class="formulario__input" name="correo">
+								</div>
+							</div>
+                        </th>
                         <!--- Curso --->
                         <th>
                             <div class="formulario__grupo" id="grupo__curso">
@@ -82,7 +91,7 @@ $result_gr_horario = $gr_horario->fetchAll();
 					                <?php
 					                }
 					                ?>
-                            </select>
+                            	</select>
                             </div>
                         </th>
                         <!--- Sede --->
@@ -98,7 +107,7 @@ $result_gr_horario = $gr_horario->fetchAll();
 					                <?php
 					                }
 					                ?>
-                            </select>
+                            	</select>
                             </div>
                         </th>
                         <!--- Horario --->

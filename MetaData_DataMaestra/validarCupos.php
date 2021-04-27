@@ -27,10 +27,15 @@ require 'cursos_database_2.php';
 $prueba = new base();
 
 // Variables 
+$correo = $_POST["correo"];
 $curso = $_POST["curso"]; 
 $sede = $_POST["sede"];
 $grupo_horario = $_POST["horario"];
 $modalidad = "Presencial";
+
+$sede_aux = $sede[0];
+$curso_aux = $curso[0];
+$grupo_horario_aux = $grupo_horario[0];
 
 // Petición id_salon 
 $id_salon = $prueba->prepare("SELECT id_salon FROM salon WHERE nombre_sede = '$sede[0]'");
@@ -58,52 +63,59 @@ for($j=0; $j<$tamanoSedes; $j++){
 }
 //echo $capacidadSede;
 
-// Actualización de cupos 
-$tamano = sizeof($result_id_salon); //valor de arreglo que recorre salones
-if($result_cupos[0][0]>0){
-    // Se verifica capacidad en sedes
-    if($capacidadSede>0){
-        // Actualización de capacidad en sedes (recorre salones)
-        for($i=0; $i<$tamano; $i++){
-            if($result_capacidad[$i][0]>0){
-                $vaux = $result_id_salon[$i][0];
-                $query_1 = "UPDATE `salon` SET `capacidad` = `capacidad` -1 WHERE `nombre_sede` = '$sede[0]' and `id_salon` = '$vaux'";
-                $result_1=mysqli_query($conexion, $query_1);
-                $query_2 = "UPDATE `curso_presencial` SET `cupos` = `cupos` -1 WHERE `nombre_curso` = '$curso[0]'";
-                $result_2=mysqli_query($conexion, $query_2);
-                header("Location: ../php/exito.php");
-                break;
+//Verificación de correo y curso (que no se repita el curso)
+$verificar_correo = mysqli_query($conexion, "SELECT * FROM metadata_datamaestra WHERE correo = '$correo'");
+$verificar_curso = mysqli_query($conexion, "SELECT * FROM metadata_datamaestra WHERE curso = '$curso[0]'");
+
+
+if(mysqli_num_rows($verificar_correo) > 0 && mysqli_num_rows($verificar_curso) > 0){
+	?>
+        <?php
+            include("programacion_cursos.php")
+        ?>
+        <p class="loginError fas fa-exclamation-triangle">Este curso ya está inscrito </p><br>
+        <?php	//termina la consulta
+        
+}
+
+else{
+    // Actualización de cupos 
+    $tamano = sizeof($result_id_salon); //valor de arreglo que recorre salones
+    if($result_cupos[0][0]>0){
+        // Se verifica capacidad en sedes
+        if($capacidadSede>0){
+            // Actualización de capacidad en sedes (recorre salones)
+            for($i=0; $i<$tamano; $i++){
+                if($result_capacidad[$i][0]>0){
+                    $vaux = $result_id_salon[$i][0];
+                    $query_1 = "UPDATE `salon` SET `capacidad` = `capacidad` -1 WHERE `nombre_sede` = '$sede_aux' and `id_salon` = '$vaux'";
+                    $result_1=mysqli_query($conexion, $query_1);
+                    $query_2 = "UPDATE `curso_presencial` SET `cupos` = `cupos` -1 WHERE `nombre_curso` = '$curso_aux'";
+                    $result_2=mysqli_query($conexion, $query_2);
+                    // Insertar info en metadata 
+                    $insertar_metadata = "INSERT INTO `metadata_datamaestra`( `correo`, `curso`, `sede`, `grupo_horario`, `modalidad`) VALUES ('$correo', '$curso_aux', '$sede_aux', '$grupo_horario[0]', '$modalidad' )";
+                    $result_insertar_metadata = mysqli_query($conexion, $insertar_metadata);
+                    header("Location: ../php/exito.php");
+                    break;
             }
         }
+    }
+        else{
+            ?>
+            <?php
+            include("programacion_cursos.php")
+            ?>
+            <p class="loginError fas fa-exclamation-triangle">Lo sentimos, no hay capacidad en la sede </p><br>
+            <?php
+        }
+    
     }
     else{
         ?>
         <?php
-            include("programacion_cursos.php")
+	    include("programacion_cursos.php")
         ?>
-        <p class="loginError fas fa-exclamation-triangle">Lo sentimos, no hay capacidad en la sede </p><br>
+        <p class="loginError fas fa-exclamation-triangle">Lo sentimos, no hay cupos disponibles </p><br>
         <?php
     }
-    
 }
-else{
-?>
-<?php
-	include("programacion_cursos.php")
-?>
-<p class="loginError fas fa-exclamation-triangle">Lo sentimos, no hay cupos disponibles </p><br>
-<?php
-}
-
-
-// Insertar info en metadata 
-//$insertar_metadata = "INSERT INTO `metadata_datamaestra`( `curso`, `sede`, `grupo_horario`, `modalidad`) VALUES ('$curso[0]', '$sede[0]', '$grupo_horario[0]', '$modalidad' )";
-//$result_insertar_metadata = mysqli_query($conexion, $insertar_metadata);
-
-/*
-if(!$result_1){
-    echo 'Error al registrarse';
-} else{
-    header("Location: ../php/exito.php");	 
-}
- */

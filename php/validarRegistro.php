@@ -40,14 +40,6 @@ if(!$resultado_estudiante){
 	header("Location: login.php");	 
 }
 
-// if(!$resultado_user_id){
-// 	echo 'Error al registrarse';
-// } else{
-// 	echo '<script>
-// 			alert("Se ha registrado exitosamente");
-// 		 </script>';
-// 	header("Location: login.php");	 
-// }
 //Cerrar Conexion
 mysqli_close($conexion);
 
