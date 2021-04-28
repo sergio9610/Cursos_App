@@ -68,8 +68,17 @@ $result_gr_horario = $gr_horario->fetchAll();
 				
 			<form method="post" class="formulario" id="formulario" onsubmit="return validar();" action="validarCupos.php">
                 <table>
-                    <tr>
-					<!--- Correo --->
+					<tr>
+					<!--- Ocupación --->
+						<th>
+							<div class="formulario__grupo" id="grupo__ocupacion">
+								<label for="correo" class="formulario__label formulario__label-ocupacion">Ocupación</label>
+								<div class="formulario__grupo-input">
+									<input type="text" id="ocupacion" class="formulario__input" name="ocupacion">
+								</div>
+							</div>
+                        </th>
+						<!--- Correo --->
 						<th>
 							<div class="formulario__grupo" id="grupo__correo">
 								<label for="correo" class="formulario__label formulario__label-correo">Correo</label>
@@ -78,6 +87,9 @@ $result_gr_horario = $gr_horario->fetchAll();
 								</div>
 							</div>
                         </th>
+					</tr>
+
+                    <tr>
                         <!--- Curso --->
                         <th>
                             <div class="formulario__grupo" id="grupo__curso">

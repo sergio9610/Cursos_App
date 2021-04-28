@@ -27,6 +27,7 @@ require 'cursos_database_2.php';
 $prueba = new base();
 
 // Variables 
+$ocupacion = $_POST["ocupacion"];
 $correo = $_POST["correo"];
 $curso = $_POST["curso"]; 
 $sede = $_POST["sede"];
@@ -41,6 +42,7 @@ $grupo_horario_aux = $grupo_horario[0];
 $id_salon = $prueba->prepare("SELECT id_salon FROM salon WHERE nombre_sede = '$sede[0]'");
 $id_salon->execute();
 $result_id_salon = $id_salon->fetchAll();
+$salon_aux = $result_id_salon[0][0];
 //echo $result_id_salon[0][0];
 
 // Petición Capacidad
@@ -54,6 +56,20 @@ $result_capacidad = $capacidad->fetchAll();
 $cupos = $prueba->prepare("SELECT cupos FROM curso_presencial WHERE nombre_curso = '$curso[0]'");
 $cupos->execute();
 $result_cupos = $cupos->fetchAll();
+
+// Petición Docente
+//Nombre
+$docente_nombre = $prueba->prepare("SELECT nombre FROM docente WHERE curso = '$curso[0]'");
+$docente_nombre->execute();
+$result_docente_nombre = $docente_nombre->fetchAll();
+$docente_nombre_aux =  $result_docente_nombre[0][0];
+//Apellido
+$docente_apellido = $prueba->prepare("SELECT apellido FROM docente WHERE curso = '$curso[0]'");
+$docente_apellido->execute();
+$result_docente_apellido = $docente_apellido->fetchAll();
+$docente_apellido_aux =  $result_docente_apellido[0][0];
+
+$docente_aux = $docente_nombre_aux.' '.$docente_apellido_aux;
 
 //Ciclo para obtener capacidad en sedes
 $tamanoSedes = sizeof($result_capacidad);
@@ -93,7 +109,7 @@ else{
                     $query_2 = "UPDATE `curso_presencial` SET `cupos` = `cupos` -1 WHERE `nombre_curso` = '$curso_aux'";
                     $result_2=mysqli_query($conexion, $query_2);
                     // Insertar info en metadata 
-                    $insertar_metadata = "INSERT INTO `metadata_datamaestra`( `correo`, `curso`, `sede`, `grupo_horario`, `modalidad`) VALUES ('$correo', '$curso_aux', '$sede_aux', '$grupo_horario[0]', '$modalidad' )";
+                    $insertar_metadata = "INSERT INTO `metadata_datamaestra`(`ocupacion`, `correo`, `curso`, `sede`, `salon`, `docente`, `grupo_horario`, `modalidad`) VALUES ('$ocupacion', '$correo', '$curso_aux', '$sede_aux', '$salon_aux', '$docente_aux', '$grupo_horario', '$modalidad' )";
                     $result_insertar_metadata = mysqli_query($conexion, $insertar_metadata);
                     header("Location: ../php/exito.php");
                     break;
