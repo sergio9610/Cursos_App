@@ -2,10 +2,31 @@
 // Conexion a base de datos
 require 'cursos_database.php';
 $objData = new Database();
+$connect = mysqli_connect("127.0.0.1:3307", "root", "", "cursos_cunati");  
 
-/*if(isset($_GET['opcion'])){
-	$sth1 = $objData->prepare('	');
-}*/
+function fill_curso($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM docente";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {  
+           $output .= '<option value="'.$row["curso_id"].'">'.$row["curso"].'</option>';  
+      }  
+      return $output;  
+ }  
+ function fill_grupo($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM grupo_horario_aux";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {    
+           $output .= '<div style="border:1px solid #ccc; padding:20px; margin-bottom:20px;">'.$row["grupo_horario"].'';  
+      }  
+      return $output;  
+ } 
+
 // Petición para curso
 $curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');
 $curso->execute();
@@ -39,6 +60,7 @@ $result_gr_horario = $gr_horario->fetchAll();
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Css Style -->
     <link rel="stylesheet" href="../css/styleProgramacion.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	
 </head>
 <body>
@@ -77,7 +99,7 @@ $result_gr_horario = $gr_horario->fetchAll();
 									<input type="text" id="ocupacion" class="formulario__input" name="ocupacion">
 								</div>
 							</div>
-                        </th>
+                        </th> 
 						<!--- Correo --->
 						<th>
 							<div class="formulario__grupo" id="grupo__correo">
@@ -92,27 +114,37 @@ $result_gr_horario = $gr_horario->fetchAll();
                     <tr>
                         <!--- Curso --->
                         <th>
-                            <div class="formulario__grupo" id="grupo__curso">
-				                <label for="curso" class="formulario__label formulario__label-ciudad">Curso</label>
-				                <select name="curso[]" id="curso">
-                                    <option value=""></option>
+							<select name="curso[]" id="curso">  
+                          		<option value=""></option>  
+                          		<option><?php echo fill_curso($connect); ?></option>  
+                    	 	</select>
+                        </th>
+                        
+                        <!--- Horario --->
+                        <th>
+							<div class="row" id="show_grupo"> 
+                         		<label for="horario" class="formulario__label formulario__label-horario">Horario</label>
+				     			<select name="horario[]" id="horario">
+                              		<option value=""></option>
 					                <!-- Se llama el result de la consulta de db_ciudad -->
-                                    <?php
-					                foreach ($result_curso as $key => $value){?>
-					                <option><?php echo $value['nombre_curso'];?></option>
-					                <?php
-					                }
-					                ?>
+                              		<?php
+					     			foreach ($result as $key => $value){?>
+					     			<option><?php echo fill_grupo($connect);?></option>
+					     			<?php
+					     			}
+					     			?>
                             	</select>
+                     		
                             </div>
                         </th>
-                        <!--- Sede --->
+
+						<!--- Sede --->
                         <th>
 			                <div class="formulario__grupo" id="grupo__sede">
 				                <label for="sede" class="formulario__label formulario__label-sede">Sede</label>
 				                <select name="sede[]" id="sede">
                                     <option value=""></option>
-					                <!-- Se llama el result de la consulta de db_ciudad -->
+					                 
                                     <?php
 					                foreach ($result_sede as $key => $value){?>
 					                <option><?php echo $value['nombre_sede'];?></option>
@@ -120,26 +152,6 @@ $result_gr_horario = $gr_horario->fetchAll();
 					                }
 					                ?>
                             	</select>
-                            </div>
-                        </th>
-                        <!--- Horario --->
-                        <th>
-                            <div class="formulario__grupo" id="grupo__horario">
-				                <label for="horario" class="formulario__label formulario__label-horario">Horario</label>
-				                <select name="horario" id="horario">
-                                    <option value=""></option>
-					                <!-- Se llama el result de la consulta de db_ciudad -->
-                                    <?php
-									//$curso = $_POST["curso"]; 
-									
-									//$result_gr_horario as $key => $value;?>
-									<option><?php echo $result_gr_horario[0][0];?></option>
-									<?php
-									
-										//echo $result_gr_horario[0][0];
-									
-					                ?>
-                            </select>
                             </div>
                         </th>
                     </tr>

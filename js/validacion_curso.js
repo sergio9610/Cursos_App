@@ -1,3 +1,18 @@
+$(document).ready(function(){  
+    $('#curso').change(function(){  
+         var curso_id = $(this).val();  
+         $.ajax({  
+              url:"load_data.php",  
+              method:"POST",  
+              data:{curso_id:curso_id},  
+              success:function(data){  
+                   $('#show_grupo').html(data);  
+              }  
+         });  
+    });  
+});
+
+
 function validar(){
 	var curso, sede, horario;
 
