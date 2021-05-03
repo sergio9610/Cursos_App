@@ -2,21 +2,47 @@
 // Conexion a base de datos
 require 'cursos_database.php';
 $objData = new Database();
+$connect = mysqli_connect("127.0.0.1:3307", "root", "", "cursos_cunati");  
 
-/*if(isset($_GET['opcion'])){
-	$sth1 = $objData->prepare('	');
-}*/
-// Peticion para curso virtual
-$curso = $objData->prepare('SELECT nombre_curso FROM curso_virtual');
+function fill_curso($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM curso_virtual";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {  
+           $output .= '<option value="'.$row["curso_id"].'">'.$row["nombre_curso"].'</option>';  
+      }  
+      return $output;  
+ }  
+ function fill_grupo($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM grupo_horario_virtual_aux";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {    
+           $output = $row["grupo_horario"];  
+      }  
+      return $output;  
+ } 
+
+// Petición para curso
+$curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');
 $curso->execute();
 $result_curso = $curso->fetchAll();
 
-// Peticion para Grupo y Horario
+// Petición para sede
+$sede = $objData->prepare('SELECT barrio, nombre_sede FROM sedes');
+$sede->execute();
+$result_sede = $sede->fetchAll();
+
+// Petición para Grupo y Horario
 $gr_horario = $objData->prepare('SELECT grupo_horario FROM docente');
 $gr_horario->execute();
 $result_gr_horario = $gr_horario->fetchAll();
 
-//echo $result_gr_horario[0][0];
+//echo $result_id_salon[1][0];
 
 ?>
 
@@ -34,6 +60,7 @@ $result_gr_horario = $gr_horario->fetchAll();
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Css Style -->
     <link rel="stylesheet" href="../css/style_virtual.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	
 </head>
 <body>
@@ -55,47 +82,61 @@ $result_gr_horario = $gr_horario->fetchAll();
 
 	<!--- Titulo Principal --->
 		<div class="tituloPrincipal">
-			<h1 id = "titulo_1" class="titulo_1 display-5 text-uppercase font-weight-bold">Programacion Curso Virtual</h1>
+			<h1 id = "titulo_1" class="titulo_1 display-5 text-uppercase font-weight-bold">Programación Curso Virtual</h1>
 		</div>
 
-	<!--- Formulario Login --->	
+	<!--- Formulario Elección Curso --->	
 		<div class="formulario col-sm-6 text-center">
 				
 			<form method="post" class="formulario" id="formulario" onsubmit="return validar();" action="validarCuposVirtual.php">
                 <table>
+					<tr>
+					<!--- Ocupación --->
+						<th>
+							<div class="formulario__grupo" id="grupo__ocupacion">
+								<label for="correo" class="formulario__label formulario__label-ocupacion">Ocupación</label>
+								<div class="formulario__grupo-input">
+									<input type="text" id="ocupacion" class="formulario__input" name="ocupacion">
+								</div>
+							</div>
+                        </th> 
+						<!--- Correo --->
+						<th>
+							<div class="formulario__grupo" id="grupo__correo">
+								<label for="correo" class="formulario__label formulario__label-correo">Correo</label>
+								<div class="formulario__grupo-input">
+									<input type="email" id="correo" class="formulario__input" name="correo">
+								</div>
+							</div>
+                        </th>
+					</tr>
+
                     <tr>
                         <!--- Curso --->
                         <th>
-                            <div class="formulario__grupo" id="grupo__curso">
-				                <label for="curso" class="formulario__label formulario__label-ciudad">Curso</label>
-				                <select name="curso[]" id="curso">
-                                    <option value=""></option>
-					                <!-- Se llama el result de la consulta de db_ciudad -->
-                                    <?php
-					                foreach ($result_curso as $key => $value){?>
-					                <option><?php echo $value['nombre_curso'];?></option>
-					                <?php
-					                }
-					                ?>
-                            </select>
-                            </div>
+							<div>
+								<label for="curso" class="formulario__label formulario__label-curso">Curso</label>
+								<select name="curso[]" id="curso">
+                          			<option><?php echo fill_curso($connect); ?></option>  
+                    	 		</select>
+							</div>
                         </th>
+                        
                         <!--- Horario --->
                         <th>
-                            <div class="formulario__grupo" id="grupo__horario">
-				                <label for="horario" class="formulario__label formulario__label-horario">Horario</label>
-				                <select name="horario[]" id="horario">
-                                    <option value=""></option>
+							<div class="row" id="show_grupo"> 
+                         		<label for="horario" class="">Horario</label>
+				     			<select name="horario[]" id="horario">
+                              		<option value=""></option>
 					                <!-- Se llama el result de la consulta de db_ciudad -->
-                                    <?php
-									//$curso = $_POST["curso"]; 
-									//$result_gr_horario as $key => $value;
-									foreach ($result_gr_horario as $key => $value){?>
-										<option><?php echo $value['grupo_horario'];?></option>
-										<?php
-										}
-									?>
-                            </select>
+                              		<?php
+					     			foreach ($result as $key => $value){?>
+					     			<option><?php echo fill_grupo($connect);?></option>
+					     			<?php
+					     			}
+					     			?>
+                            	</select>
+                     		
                             </div>
                         </th>
                     </tr>
@@ -122,10 +163,10 @@ $result_gr_horario = $gr_horario->fetchAll();
 						</a> 
 					</li>
 				</ul>
-			</div>
+		</div>
 	
 	</header><!-- /header -->
 	<!-- Scripts -->
-	<script src="../js/validacion_virtual.js"></script>
+	<script src="../js/validacionVirtual.js"></script>
 </body>
 </html>

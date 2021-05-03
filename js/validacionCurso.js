@@ -14,14 +14,16 @@ $(document).ready(function(){
 
 
 function validar(){
-	var curso, sede, horario;
+	var ocupacion, correo, sede, curso, horario;
 
+     ocupacion = document.getElementById("ocupacion").value;
+     correo = document.getElementById("correo").value;
+     sede = document.getElementById("sede").value;
 	curso = document.getElementById("curso").value;
-	sede = document.getElementById("sede").value;
 	horario = document.getElementById("horario").value;
 	
 	
-	if(curso === "" || sede === "" || horario === ""){
+	if(ocupacion === "" || correo === "" || sede === "" || curso === "" || horario === ""){
 		alert("Todos los campos son obligatorios");
 		return false;
 	}

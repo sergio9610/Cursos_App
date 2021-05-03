@@ -1,29 +1,8 @@
 <?php
-// Actualizacion de Cupos
+// Conexion a base de datos
 require '../php/conexion.php';
 require 'cursos_database_2.php';
 require 'load_data.php';
-// ******************
-//$connect = mysqli_connect("127.0.0.1:3307", "root", "", "cursos_cunati");
-/*$output = '';  
- if(isset($_POST["curso_id"]))  
- {  
-      if($_POST["curso_id"] != '')  
-      {  
-           $sql = "SELECT * FROM grupo_horario_aux WHERE curso_id = '".$_POST["curso_id"]."'";  
-      }  
-      else  
-      {  
-           $sql = "SELECT * FROM grupo_horario_aux";  
-      }  
-      $result = mysqli_query($conexion, $sql);  
-      while($row = mysqli_fetch_array($result))  
-      {  
-           $output .= '<div class="col-md-3"><div style="border:1px solid #ccc; padding:20px; margin-bottom:20px;">'.$row["grupo_horario"].'</div></div>';  
-      }  
-      echo $output;  
- } */
-
 
 $prueba = new base();
 
@@ -59,13 +38,13 @@ $result_capacidad = $capacidad->fetchAll();
 
 
 // Petición de Cupos
-$cupos = $prueba->prepare("SELECT cupos FROM curso_presencial WHERE id = '$curso[0]'");
+$cupos = $prueba->prepare("SELECT cupos FROM curso_presencial WHERE curso_id = '$curso[0]'");
 $cupos->execute();
 $result_cupos = $cupos->fetchAll();
 //echo $result_cupos[0][0];
 
 // Petición Curso
-$nombre_curso = $prueba->prepare("SELECT nombre_curso FROM curso_presencial WHERE id = '$curso[0]'");
+$nombre_curso = $prueba->prepare("SELECT nombre_curso FROM curso_presencial WHERE curso_id = '$curso[0]'");
 $nombre_curso->execute();
 $result_nombre_curso = $nombre_curso->fetchAll();
 $nombre_curso_aux  = $result_nombre_curso[0][0];
@@ -83,7 +62,6 @@ $docente_apellido = $prueba->prepare("SELECT apellido FROM docente WHERE curso_i
 $docente_apellido->execute();
 $result_docente_apellido = $docente_apellido->fetchAll();
 $docente_apellido_aux =  $result_docente_apellido[0][0];
-
 $docente_aux = $docente_nombre_aux.' '.$docente_apellido_aux;   //nombre y apellido
 //echo $docente_aux;
 
@@ -93,7 +71,6 @@ $capacidadSede = 0;
 for($j=0; $j<$tamanoSedes; $j++){
     $capacidadSede = $capacidadSede + $result_capacidad[$j][0];
 }
-//echo $capacidadSede;
 
 //Verificación de correo y curso (que no se repita el curso)
 $verificar_correo = mysqli_query($conexion, "SELECT * FROM metadata_datamaestra WHERE correo = '$correo'");
