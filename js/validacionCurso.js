@@ -6,7 +6,8 @@ $(document).ready(function(){
               method:"POST",  
               data:{curso_id:curso_id},  
               success:function(data){  
-                   $('#show_grupo').html(data);  
+                   $('#show_grupo').html(data);
+                   $('#show_cupos').html(data);  
               }  
          });  
     });  

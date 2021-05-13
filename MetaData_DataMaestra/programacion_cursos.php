@@ -4,6 +4,19 @@ require 'cursos_database.php';
 $objData = new Database();
 $connect = mysqli_connect("127.0.0.1:3307", "root", "", "cursos_cunati");  
 
+// Petición para sede
+$sede = $objData->prepare('SELECT barrio, nombre_sede FROM sedes');
+$sede->execute();
+$result_sede = $sede->fetchAll();
+
+// Petición de Cupos
+/*
+$curso = $_POST["curso"];
+$cupos = $objData->prepare("SELECT cupos FROM curso_presencial WHERE curso_id = '$curso[0]'");
+$cupos->execute();
+$result_cupos = $cupos->fetchAll();
+echo $result_cupos[0][0];
+*/
 function fill_curso($connect)  
  {  
       $output = '';  
@@ -15,6 +28,7 @@ function fill_curso($connect)
       }  
       return $output;  
  }  
+
  function fill_grupo($connect)  
  {  
       $output = '';  
@@ -27,23 +41,18 @@ function fill_curso($connect)
       return $output;  
  } 
 
-// Petición para curso
-$curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');
-$curso->execute();
-$result_curso = $curso->fetchAll();
-
-// Petición para sede
-$sede = $objData->prepare('SELECT barrio, nombre_sede FROM sedes');
-$sede->execute();
-$result_sede = $sede->fetchAll();
-
-// Petición para Grupo y Horario
-$gr_horario = $objData->prepare('SELECT grupo_horario FROM docente');
-$gr_horario->execute();
-$result_gr_horario = $gr_horario->fetchAll();
-
-//echo $result_id_salon[1][0];
-
+function fill_cupos($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM grupo_horario_aux";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {    
+           $output = $row["cupos"];  
+      }  
+      return $output;  
+ }
+ 
 ?>
 
 <!DOCTYPE html>
@@ -149,6 +158,24 @@ $result_gr_horario = $gr_horario->fetchAll();
                               		<?php
 					     			foreach ($result as $key => $value){?>
 					     			<option><?php echo fill_grupo($connect);?></option>
+					     			<?php
+					     			}
+					     			?>
+                            	</select>
+                     		
+                            </div>
+                        </th>
+
+						<!--- Cupos --->
+                        <th>
+							<div class="row" id="show_cupos"> 
+                         		<label for="cupos" class="">Cupos</label>
+				     			<select name="cupos[]" id="cupos">
+                              		<option value=""></option>
+					                <!-- Se llama el result de la consulta de db_ciudad -->
+                              		<?php
+					     			foreach ($result as $key => $value){?>
+					     			<option><?php echo fill_cupos($connect);?></option>
 					     			<?php
 					     			}
 					     			?>
