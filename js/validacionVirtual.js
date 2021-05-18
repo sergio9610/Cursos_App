@@ -12,6 +12,19 @@ $(document).ready(function(){
     });  
 });
 
+$(document).ready(function(){  
+     $('#curso').change(function(){  
+          var curso_id = $(this).val();  
+          $.ajax({  
+               url:"load_data_virtual_2.php",  
+               method:"POST",  
+               data:{curso_id:curso_id},  
+               success:function(data){  
+                    $('#show_cupos').html(data);  
+               }  
+          });  
+     });  
+ });
 
 function validar(){
 	var ocupacion, correo, curso, horario;

@@ -3,18 +3,53 @@
 require 'cursos_database.php';
 $objData = new Database();
 $connect = mysqli_connect("127.0.0.1:3307", "root", "", "cursos_cunati");  
-
 function fill_curso($connect)  
  {  
       $output = '';  
       $sql = "SELECT * FROM curso_virtual";  
       $result = mysqli_query($connect, $sql);  
-      while($row = mysqli_fetch_array($result))  
+	 
+	  //Peticion para nombre_curso
+	  $objData = new Database();
+	  $sql_nombre_curso = $objData->prepare('SELECT nombre_curso FROM curso_virtual');  
+	  $sql_nombre_curso->execute(); 
+	  $result_nombre_curso = $sql_nombre_curso->fetchAll();
+	  $nombre_curso_aux  = $result_nombre_curso[0][0];
+      
+	  //Peticion para cupos
+	  $sql_cupos = $objData->prepare('SELECT cupos  FROM curso_virtual');  
+	  $sql_cupos->execute(); 
+	  $result_cupos = $sql_cupos->fetchAll();
+
+	  //Peticion para curso_id
+	  $sql_curso_id = $objData->prepare('SELECT curso_id  FROM curso_virtual');  
+	  $sql_curso_id->execute(); 
+	  $result_curso_id = $sql_curso_id->fetchAll();
+	  $curso_id_aux = $result_curso_id[0][0];
+
+	  //Ciclo para obtener capacidad 
+	  $tamanoCupos = sizeof($result_cupos);
+	  $capacidad = 0;
+	  //$capacidadNombreCurso = 0;
+	  for($j=0; $j<$tamanoCupos; $j++){
+		  $capacidad =  $result_cupos[$j][0];
+		  $curso_id_aux = $result_curso_id[$j][0];
+		  $nombre_curso_aux = $result_nombre_curso[$j][0];
+		  if($capacidad > 0){
+			$output .= '<option value="'.$curso_id_aux.'">'.$nombre_curso_aux.'</option>';
+		  }
+		  else{
+			$output .= '';
+		  }
+	  }
+	  return $output;
+
+	  /*while($row = mysqli_fetch_array($result))  
       {  
-           $output .= '<option value="'.$row["curso_id"].'">'.$row["nombre_curso"].'</option>';  
-      }  
-      return $output;  
- }  
+           $output .= '<option value="'.$curso_id_aux.'">'.$nombre_curso_aux.'</option>';  
+      }*/  
+        
+ } 
  function fill_grupo($connect)  
  {  
       $output = '';  
@@ -26,6 +61,18 @@ function fill_curso($connect)
       }  
       return $output;  
  } 
+
+ function fill_cupos($connect)  
+ {  
+      $output = '';  
+      $sql = "SELECT * FROM grupo_horario_aux";  
+      $result = mysqli_query($connect, $sql);  
+      while($row = mysqli_fetch_array($result))  
+      {    
+           $output = $row["cupos"];  
+      }  
+      return $output;  
+ }
 
 // Petición para curso
 $curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');

@@ -40,6 +40,14 @@ body{
     margin-left: 130px;
 }
 
+.formulario__grupo{
+    margin-left: 2px;
+}
+
+.row{
+    margin-left: 20px;
+}
+
 .btn{
 	background-color: #71D56B;
 }

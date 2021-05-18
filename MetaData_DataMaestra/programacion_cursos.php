@@ -9,24 +9,53 @@ $sede = $objData->prepare('SELECT barrio, nombre_sede FROM sedes');
 $sede->execute();
 $result_sede = $sede->fetchAll();
 
-// Petición de Cupos
-/*
-$curso = $_POST["curso"];
-$cupos = $objData->prepare("SELECT cupos FROM curso_presencial WHERE curso_id = '$curso[0]'");
-$cupos->execute();
-$result_cupos = $cupos->fetchAll();
-echo $result_cupos[0][0];
-*/
+
 function fill_curso($connect)  
  {  
       $output = '';  
       $sql = "SELECT * FROM curso_presencial";  
       $result = mysqli_query($connect, $sql);  
-      while($row = mysqli_fetch_array($result))  
+	 
+	  //Peticion para nombre_curso
+	  $objData = new Database();
+	  $sql_nombre_curso = $objData->prepare('SELECT nombre_curso FROM curso_presencial');  
+	  $sql_nombre_curso->execute(); 
+	  $result_nombre_curso = $sql_nombre_curso->fetchAll();
+	  $nombre_curso_aux  = $result_nombre_curso[0][0];
+      
+	  //Peticion para cupos
+	  $sql_cupos = $objData->prepare('SELECT cupos  FROM curso_presencial');  
+	  $sql_cupos->execute(); 
+	  $result_cupos = $sql_cupos->fetchAll();
+
+	  //Peticion para curso_id
+	  $sql_curso_id = $objData->prepare('SELECT curso_id  FROM curso_presencial');  
+	  $sql_curso_id->execute(); 
+	  $result_curso_id = $sql_curso_id->fetchAll();
+	  $curso_id_aux = $result_curso_id[0][0];
+
+	  //Ciclo para obtener capacidad 
+	  $tamanoCupos = sizeof($result_cupos);
+	  $capacidad = 0;
+	  //$capacidadNombreCurso = 0;
+	  for($j=0; $j<$tamanoCupos; $j++){
+		  $capacidad =  $result_cupos[$j][0];
+		  $curso_id_aux = $result_curso_id[$j][0];
+		  $nombre_curso_aux = $result_nombre_curso[$j][0];
+		  if($capacidad > 0){
+			$output .= '<option value="'.$curso_id_aux.'">'.$nombre_curso_aux.'</option>';
+		  }
+		  else{
+			$output .= '';
+		  }
+	  }
+	  return $output;
+
+	  /*while($row = mysqli_fetch_array($result))  
       {  
-           $output .= '<option value="'.$row["curso_id"].'">'.$row["nombre_curso"].'</option>';  
-      }  
-      return $output;  
+           $output .= '<option value="'.$curso_id_aux.'">'.$nombre_curso_aux.'</option>';  
+      }*/  
+        
  }  
 
  function fill_grupo($connect)  
@@ -68,7 +97,8 @@ function fill_cupos($connect)
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
         integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
     <!-- Css Style -->
-    <link rel="stylesheet" href="../css/styleProgramacion.css">
+    <link rel="stylesheet" href="../css/style_programacion.css">
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" /> --> 
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
 	
 </head>
@@ -92,6 +122,7 @@ function fill_cupos($connect)
 	<!--- Titulo Principal --->
 		<div class="tituloPrincipal">
 			<h1 id = "titulo_1" class="titulo_1 display-5 text-uppercase font-weight-bold">Programación de tu Curso</h1>
+ 			
 		</div>
 
 	<!--- Formulario Elección Curso --->	
@@ -105,7 +136,7 @@ function fill_cupos($connect)
 							<div class="formulario__grupo" id="grupo__ocupacion">
 								<label for="ocupacion" class="formulario__label formulario__label-ocupacion">Ocupación</label>
 								<div class="formulario__grupo-input">
-									<input type="text" id="ocupacion" class="formulario__input" name="ocupacion">
+									<input type="text" id="ocupacion" class="formulario__input_ocupacion" name="ocupacion">
 								</div>
 							</div>
                         </th> 
@@ -114,7 +145,7 @@ function fill_cupos($connect)
 							<div class="formulario__grupo" id="grupo__correo">
 								<label for="correo" class="formulario__label formulario__label-correo">Correo</label>
 								<div class="formulario__grupo-input">
-									<input type="email" id="correo" class="formulario__input" name="correo">
+									<input type="email" id="correo" class="formulario__input_correo" name="correo">
 								</div>
 							</div>
                         </th>
@@ -211,6 +242,6 @@ function fill_cupos($connect)
 	
 	</header><!-- /header -->
 	<!-- Scripts -->
-	<script src="../js/validacionCurso.js"></script>
+	<script src="../js/validacion_curso.js"></script>
 </body>
 </html>

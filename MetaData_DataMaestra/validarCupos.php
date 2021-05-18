@@ -65,6 +65,13 @@ $docente_apellido_aux =  $result_docente_apellido[0][0];
 $docente_aux = $docente_nombre_aux.' '.$docente_apellido_aux;   //nombre y apellido
 //echo $docente_aux;
 
+// Petición grupo_horario_aux
+$grupo_horario2 = $prueba->prepare("SELECT grupo_horario FROM grupo_horario_aux WHERE curso_id = '$curso[0]'");
+$grupo_horario2->execute();
+$result_grupo_horario2 = $grupo_horario2->fetchAll();
+$grupo_horario_aux2 = $result_grupo_horario2[0][0];
+//echo $grupo_horario_aux2;
+
 //Ciclo para obtener capacidad en sedes
 $tamanoSedes = sizeof($result_capacidad);
 $capacidadSede = 0;
@@ -102,6 +109,8 @@ else{
                     $result_1=mysqli_query($conexion, $query_1);
                     $query_2 = "UPDATE `curso_presencial` SET `cupos` = `cupos` -1 WHERE `nombre_curso` = '$nombre_curso_aux'";
                     $result_2=mysqli_query($conexion, $query_2);
+                    $query_3 = "UPDATE `grupo_horario_aux` SET `cupos` = `cupos` -1 WHERE `grupo_horario` = '$grupo_horario_aux2'";
+                    $result_3=mysqli_query($conexion, $query_3);
                     // Insertar info en metadata 
                     $insertar_metadata = "INSERT INTO `metadata_datamaestra`(`ocupacion`, `correo`, `curso`, `sede`, `salon`, `docente`, `grupo_horario`, `modalidad`) VALUES ('$ocupacion', '$correo', '$nombre_curso_aux', '$sede_aux', '$salon_aux', '$docente_aux', '$grupo_horario_aux', '$modalidad' )";
                     $result_insertar_metadata = mysqli_query($conexion, $insertar_metadata);
